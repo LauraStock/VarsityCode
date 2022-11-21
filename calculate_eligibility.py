@@ -25,52 +25,55 @@ def calculate_eligibility(NumPeople,HouseCost,Deposit,Sal1,Sal2,Overpayment):
                     #print("Salaries arent 0")
                     MortgageAmount = 5*(Sal1+Sal2)
                 else:
-                    return [MortgageAmount, AnnualRepayment, TotalRepaid, TotalOverpayment, YearsOverpayment]                    
+                    return [MortgageAmount, AnnualRepayment, TotalRepaid, YearsOverpayment]                    
             else:
-                return [MortgageAmount, AnnualRepayment, TotalRepaid, TotalOverpayment, YearsOverpayment]  
+                return [MortgageAmount, AnnualRepayment, TotalRepaid, YearsOverpayment]  
         else:
-            return [MortgageAmount, AnnualRepayment, TotalRepaid, TotalOverpayment, YearsOverpayment]
+            return [MortgageAmount, AnnualRepayment, TotalRepaid, YearsOverpayment]
     else:
-        return [MortgageAmount, AnnualRepayment, TotalRepaid, TotalOverpayment, YearsOverpayment]   
+        return [MortgageAmount, AnnualRepayment, TotalRepaid, YearsOverpayment]   
     
-    
-    x = MortgageAmount #amount borrowed
-    r = 0.05 #interest rate
-    y = 20 #years of mortgage
-    p = (r*x)/(1-(1+r)**(-y)) #minimum annual payment
-    AnnualRepayment = p
-    ovp = Overpayment #annual overpayment 
-    
-    annp = p+ovp #total annual payment 
-    
-    TotalRepaid = p*y #total paid over 20years
-    
-    TotalOverpayment = 0
-    Current_owe = x
-    
-    i = 0
-    
-    #print(p)
-    #print(TotalRepaid)
-    
-    while i<y:
-        Current_owe = Current_owe*(1+r) - annp
-        TotalOverpayment += annp
-        #print('year {}, currently owe {}'.format(i+1,Current_owe) )
-        if Current_owe < annp:
-            TotalOverpayment += Current_owe
-            Current_owe = 0
-            #print('currently in year {}'.format(i+1))
-            i+=1
-            break
-        i+=1
+    if Overpayment<0:
+        return [MortgageAmount, AnnualRepayment, TotalRepaid, YearsOverpayment]
+    else:
+        x = MortgageAmount #amount borrowed
+        r = 0.05 #interest rate
+        y = 20 #years of mortgage
+        p = (r*x)/(1-(1+r)**(-y)) #minimum annual payment
+        AnnualRepayment = p
+        ovp = Overpayment #annual overpayment 
         
-    YearsOverpayment= i
-    #print('total paid {}'.format(TotalOverpayment))  
-    return [MortgageAmount, AnnualRepayment, TotalRepaid, TotalOverpayment, YearsOverpayment]  
+        annp = p+ovp #total annual payment 
+        
+        TotalRepaid = p*y #total paid over 20 years
+        
+        TotalOverpayment = 0
+        Current_owe = x
+        
+        i = 0
+        
+        #print(p)
+        #print(TotalRepaid)
+        
+        while i<y:
+            Current_owe = Current_owe*(1+r) - annp
+            TotalOverpayment += annp
+            #print('year {}, currently owe {}'.format(i+1,Current_owe) )
+            if Current_owe < annp:
+                TotalOverpayment += Current_owe
+                Current_owe = 0
+                #print('currently in year {}'.format(i+1))
+                i+=2
+                break
+            i+=1
+            
+        YearsOverpayment= i
+        #print('total paid {}'.format(TotalOverpayment))  
+        return [MortgageAmount, round(AnnualRepayment,2), round(TotalRepaid,2), YearsOverpayment] 
+
     
     
-print(calculate_eligibility(1,120000,18000,29000,0,145000))
+print(calculate_eligibility( 3, 120000, 18000, 29000, 17000, 150 ))
     
         
     
